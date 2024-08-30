@@ -10,4 +10,5 @@ func RegisterBookRoutes(r *gin.Engine) {
 	r.GET("/books", handlers.GetBooks)
 	r.POST("/books", handlers.PostBooks)
 	r.GET("/books/:id", handlers.GetBookByID)
+	r.PUT("/books/:id", handlers.DeleteBookByID)
 }

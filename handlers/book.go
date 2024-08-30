@@ -69,3 +69,24 @@ func GetBookByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, book)
 }
+func DeleteBookByID(c *gin.Context) {
+	id := c.Param("id")
+	result, err := database.DB.Exec("DELETE FROM books WHERE id = ?", id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
+}
