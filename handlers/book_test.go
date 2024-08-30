@@ -17,6 +17,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/books", GetBooks)
 	r.POST("/books", PostBooks)
 	r.GET("/books/:id", GetBookByID)
+	r.PUT("/books/:id", DeleteBookByID)
 	return r
 }
 
@@ -53,6 +54,18 @@ func TestPostBooks(t *testing.T) {
 func TestGetBookByID(t *testing.T) {
 	router := SetupRouter()
 	req, err := http.NewRequest("GET", "/books/1", nil)
+	if err != nil {
+		t.Fatalf("Couldn't create request: %v", err)
+	}
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
+func TestDeleteBookByID(t *testing.T) {
+	router := SetupRouter()
+	req, err := http.NewRequest("DELETE", "/books/1", nil)
 	if err != nil {
 		t.Fatalf("Couldn't create request: %v", err)
 	}
